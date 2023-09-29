@@ -37,7 +37,7 @@ class LinearRegression(nn.Module):
         out = self.fc(x)
         return out
 
-#define hyperparameters
+# define hyperparameters
 
 num_epochs = 400000
 lr = 0.00002
