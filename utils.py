@@ -30,6 +30,18 @@ def get_all_dates_in_year(year):
 
     return all_dates
 
+def get_date_encoded(date):
+    start_date = datetime.date(2021, 1, 1)
+    end_date = date.date()
+
+    days = 0
+    current_date = start_date
+    while current_date <= end_date:
+        days += 1
+        current_date += datetime.timedelta(days=1)
+
+    return days-1
+
 def get_month_predictions():
     X_2022 = []
     y_2022 = []
@@ -67,3 +79,6 @@ def get_2021_data():
 
 def get_model_params():
     return [param.data for param in model.parameters()]
+
+def predict(x):
+    return model(torch.Tensor([x])).item()
