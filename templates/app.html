@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <title>Fetch 2022 Scan Predictions</title>
+        <style>
+            body {
+                font-family:'Courier New',monospace;
+            }
+
+            .hdr {
+                text-align: center;
+                font-weight: bold;
+                margin-top: 2rem;
+            }
+
+            .flexContainer {
+                display: flex;
+                justify-content: center;
+                margin: 1rem 0 0 0;
+                column-gap: 10rem;
+            }
+
+            .toggleBtn {
+                font-size: 1.5rem;
+                font-weight: bolder;
+                background-color: rgba(54, 162, 235, 0.4) !important;
+                border-color: rgba(54, 162, 235, 0.4) !important;
+                border: none !important;
+            }
+
+            .results {
+                margin-top: 20rem;
+            }
+
+            #bar, #scatter {
+                width: 60rem !important;
+                height: 30rem !important;
+            }
+
+            .tableContainer {
+                width: 60rem !important;
+            }
+            
+            @media only screen and (max-width: 1500px) {
+                .flexContainer {
+                    display: flex;
+                    justify-content: center;
+                    flex-direction: column;
+                }
+
+                .toggleBtn {
+                    margin-left: 40%;
+                    width: 20% !important;
+                }
+
+                .results {
+                    margin-top: 5rem;
+                }
+
+                .tableContainer {
+                    width: 100% !important;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <h1 class="hdr">Fetch 2022 Scan Predictions</h1>
+        <h2 class="hdr">Corey Johnsen</h1>
+        <div class="flexContainer">
+            <div>
+                <div class="flexContainer">
+                    <button type="button" class="toggleBtn btn btn-primary" onclick="toggle2021Data()">Toggle 2021 Data</button>
+                </div>
+                <div class="flexContainer">
+                    <canvas id="bar"></canvas>
+                </div>
+                <div class="flexContainer">
+                    <canvas id="scatter"></canvas>
+                </div>
+            </div>
+            <div class="tableContainer">
+                <table class="table results">
+                    <thead>
+                      <tr>
+                        <th scope="col">Month (2022)</th>
+                        <th scope="col">Predicted Scans</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>January</td>
+                        <td>{{ predictions[0] }}</td>
+                      </tr>
+                      <tr>
+                        <td>February</td>
+                        <td>{{ predictions[1] }}</td>
+                      </tr>
+                      <tr>
+                        <td>March</td>
+                        <td>{{ predictions[2] }}</td>
+                      </tr>
+                      <tr>
+                        <td>April</td>
+                        <td>{{ predictions[3] }}</td>
+                      </tr>
+                      <tr>
+                        <td>May</td>
+                        <td>{{ predictions[4] }}</td>
+                      </tr>
+                      <tr>
+                        <td>June</td>
+                        <td>{{ predictions[5] }}</td>
+                      </tr>
+                      <tr>
+                        <td>July</td>
+                        <td>{{ predictions[6] }}</td>
+                      </tr>
+                      <tr>
+                        <td>August</td>
+                        <td>{{ predictions[7] }}</td>
+                      </tr>
+                      <tr>
+                        <td>September</td>
+                        <td>{{ predictions[8] }}</td>
+                      </tr>
+                      <tr>
+                        <td>October</td>
+                        <td>{{ predictions[9] }}</td>
+                      </tr>
+                      <tr>
+                        <td>November</td>
+                        <td>{{ predictions[10] }}</td>
+                      </tr>
+                      <tr>
+                        <td>December</td>
+                        <td>{{ predictions[11] }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </body>
+    <script>
+        // Bar chart setup
+        var barData = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [{
+                label: '2022 Scan Predictions by Month',
+                data: {{ predictions }},
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.4)',
+                ]
+            }]
+        };
+        const barConfig = {
+            type: 'bar',
+            data: barData,
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Scans per Month'
+                    }
+                },
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Scans'
+                        },
+                        beginAtZero: true
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        },
+                    }
+                }
+            },
+        };
+        var currBarChart = new Chart(document.getElementById('bar'), barConfig);
+
+        // toggles 2021 data on bar chart
+        toggle = false;
+        function toggle2021Data() {
+            if (!toggle) {
+                barData.datasets = [{
+                    label: '2021 Scans by Month',
+                    data: {{ data_2021 }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.4)',
+                    ]
+                }, {
+                    label: '2022 Scan Predictions by Month',
+                    data: {{ predictions }},
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.4)',
+                    ]
+                }];
+            } else barData.datasets = [barData.datasets[1]]
+            currBarChart.destroy();
+            currBarChart = new Chart(document.getElementById('bar'), barConfig);
+            toggle = !toggle;
+        }
+
+        // setup for scatter plot
+        var combinedScans = {{ data_2021}}.concat({{ predictions }})
+        var c = 0;
+        data_2021 = {{ data_2021 }};
+        data_2021_pts = [];
+        for (let i in data_2021) {
+            data_2021_pts.push({
+                x: i,
+                y: data_2021[i]
+            });
+            c += 1;
+        }
+        pred_2022 = {{ predictions }};
+        pred_2022_pts = []
+        for (let i in pred_2022) {
+            console.log
+            pred_2022_pts.push({
+                x: Number(i) + c,
+                y: pred_2022[i]
+            });
+        }
+        var scatterData = {
+            datasets: [{
+                label: '2021 Scan Data',
+                data: data_2021_pts,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.4)',
+                ]
+            }, {
+                label: '2022 Scan Predictions',
+                data: pred_2022_pts,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.4)',
+                ]
+            }]
+        };
+        const scatterConfig = {
+            type: 'scatter',
+            data: scatterData,
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Scans per Month'
+                    }
+                },
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Scans'
+                        },
+                        beginAtZero: true
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month (0 is January 2021)'
+                        },
+                    }
+                }
+            },
+        };
+        var currScatterChart = new Chart(document.getElementById('scatter'), scatterConfig);
+    </script>
+</html>
