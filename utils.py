@@ -5,6 +5,7 @@ import pandas as pd
 
 DATE_START_IDX = 365
 
+# define model
 class LinearRegression(nn.Module):
     def __init__(self):
         super(LinearRegression, self).__init__()
@@ -13,11 +14,13 @@ class LinearRegression(nn.Module):
     def forward(self, x):
         out = self.fc(x)
         return out
-    
+
+# create model and load parameters
 model = LinearRegression()
 model.load_state_dict(torch.load('models/fetch_2022_linear.pth'))
-model.eval()
+model.eval() # switch to evaluation mode
 
+# returns a list of all the dates in a given year
 def get_all_dates_in_year(year):
     start_date = datetime.date(year, 1, 1)
     end_date = datetime.date(year, 12, 31)
@@ -30,6 +33,7 @@ def get_all_dates_in_year(year):
 
     return all_dates
 
+# given a date object, returns the date encoded as days after Jan 1 2021
 def get_date_encoded(date):
     start_date = datetime.date(2021, 1, 1)
     end_date = date.date()
@@ -42,6 +46,7 @@ def get_date_encoded(date):
 
     return days-1
 
+# gets predictions for receipts scanned in each month of 2022
 def get_month_predictions():
     X_2022 = []
     y_2022 = []
@@ -62,6 +67,7 @@ def get_month_predictions():
     totals[curr_month-1] = int(running)
     return totals
 
+# gets monthly scans for each month in 2021
 def get_2021_data():
     data = pd.read_csv('data_daily.csv', sep=',', header=None)
     daily_scans = [data.iloc[i,1] for i in range(len(data))]
@@ -77,8 +83,6 @@ def get_2021_data():
     totals[curr_month-1] = int(running)
     return totals
 
-def get_model_params():
-    return [param.data for param in model.parameters()]
-
+# predicts receipts scanned for a given date
 def predict(x):
     return model(torch.Tensor([x])).item()

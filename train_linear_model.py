@@ -8,6 +8,8 @@ import os
 
 data = pd.read_csv('data_daily.csv', sep=',', header=None)
 
+# format data into (days after Jan 1 2021, scans)
+
 new_data = []
 for i in range(0,len(data)):
     date_obj = datetime.datetime.strptime(data.iloc[i,0], '%Y-%m-%d')
@@ -18,10 +20,13 @@ for i in range(0,len(data)):
 init_data = data
 data = pd.DataFrame(new_data, columns=['day', 'scans'])
 
+# shuffle data and split into training and testing sets
+
 shuffled_data = data.sample(frac=1)
 train_cutoff = int(len(shuffled_data)*0.7)
-
 X_train, X_test, y_train, y_test = shuffled_data.iloc[:train_cutoff,0], shuffled_data.iloc[train_cutoff:,0], shuffled_data.iloc[:train_cutoff,1], shuffled_data.iloc[train_cutoff:,1]
+
+# define the linear regression model
 
 class LinearRegression(nn.Module):
     def __init__(self):
@@ -32,13 +37,22 @@ class LinearRegression(nn.Module):
         out = self.fc(x)
         return out
 
-model = LinearRegression()
-criterion = nn.MSELoss()
-optimizer = optim.SGD(model.parameters(), lr=0.00002)
+#define hyperparameters
 
 num_epochs = 400000
+lr = 0.00002
+
+# create model and define loss fn and optimizer
+
+model = LinearRegression()
+criterion = nn.MSELoss()
+optimizer = optim.SGD(model.parameters(), lr=lr)
+
+# convert training data to tensors
 
 X_train, y_train = torch.Tensor(X_train.values).reshape((len(X_train), 1)), torch.Tensor(y_train.values).reshape((len(y_train), 1))
+
+# train model
 
 for epoch in range(num_epochs):
     outputs = model(X_train)
@@ -49,11 +63,15 @@ for epoch in range(num_epochs):
     if (epoch + 1) % 100000 == 0:
         print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
 
+# test model on test data and output the average error in predictions
+
 X_test = torch.Tensor(X_test.values).reshape((len(X_test), 1))
 with torch.no_grad():
     predictions = model(X_test)
 
 print(f'Average error: {np.mean([abs(predictions[i].item() - y_test.iloc[i]) for i in range(len(y_test))])}')
+
+# save the model
 
 if not os.path.exists('./models'):
     os.makedirs('./models')
