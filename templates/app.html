@@ -150,7 +150,7 @@
         var barData = {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             datasets: [{
-                label: '2022 Scan Predictions by Month',
+                label: '2022 Predictions',
                 data: {{ predictions }},
                 backgroundColor: [
                     'rgba(54, 162, 235, 0.4)',
@@ -191,13 +191,13 @@
         function toggle2021Data() {
             if (!toggle) {
                 barData.datasets = [{
-                    label: '2021 Scans by Month',
+                    label: '2021 Scans',
                     data: {{ data_2021 }},
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.4)',
                     ]
                 }, {
-                    label: '2022 Scan Predictions by Month',
+                    label: '2022 Predictions',
                     data: {{ predictions }},
                     backgroundColor: [
                         'rgba(54, 162, 235, 0.4)',
@@ -232,13 +232,13 @@
         }
         var scatterData = {
             datasets: [{
-                label: '2021 Scan Data',
+                label: '2021 Scans',
                 data: data_2021_pts,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.4)',
                 ]
             }, {
-                label: '2022 Scan Predictions',
+                label: '2022 Predictions',
                 data: pred_2022_pts,
                 backgroundColor: [
                     'rgba(54, 162, 235, 0.4)',

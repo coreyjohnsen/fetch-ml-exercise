@@ -22,9 +22,9 @@ Creating the container will do the following:
 4. Run `python train_linear_model.py`, which will train a linear regression model to fit the data in `data_daily.csv` and save it to `/fetch-ml/models/fetch_2022_linear.pth`
 5. Expose port 5000 and define entrypoint
 
-After the image is created, a container can be started with `docker run -p 5000:5000 <image_name>`. This command will start the web server on port 5000 and, after the container is started, the application will be available at [localhost:5000](localhost:5000). To change the desired port for the web server, change `5000:5000` to `<desired_port>:5000`.
+Building the image will take a few minutes due to installing the requirements and training the model. After the image is created, a container can be started with `docker run -p 5000:5000 <image_name>`. This command will start the web server on port 5000 and, after the container is started, the application will be available at [localhost:5000](localhost:5000). To change the desired port for the web server, change `5000:5000` to `<desired_port>:5000`.
 
-To avoid building the image locally, pull the image from the Docker Hub by running `docker pull cjjohnsen/fetch_ml_coreyjohnsen:latest` and then start the container with `docker run -p 5000:5000 cjjohnsen/fetch_ml_coreyjohnsen`.
+To avoid building the image locally, pull the image from the Docker Hub by running `docker pull cjjohnsen/fetch_ml_coreyjohnsen:latest` and then start the container with `docker run -p 5000:5000 cjjohnsen/fetch_ml_coreyjohnsen`. The image download is around 2.5 GB.
 
 #### Running the Application Locally
 
