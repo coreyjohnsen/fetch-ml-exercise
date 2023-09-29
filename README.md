@@ -13,7 +13,7 @@ The training for this project is done using PyTorch. The model is simple linear 
 
 #### Running the Application with Docker
 
-This application can be run via a Docker container that can either be built locally or pulled from Docker Hub. After ensuring Docker is installed, the image can be built by running `docker build -t <image_name> .` from the project directory.
+This application can be run via a Docker container that can either be built locally or pulled from Docker Hub. After cloning the project and ensuring Docker is installed, the image can be built by running `docker build -t <image_name> .` from the project directory.
 Creating the container will do the following:
 
 1. Set the working directory in the image to `/fetch-ml`
